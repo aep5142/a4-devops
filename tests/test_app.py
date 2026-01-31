@@ -1,6 +1,5 @@
 from app.main import app
 
-
 class FakeCursor:
 	def __init__(self, fetch_result=None, rowcount=1):
 		self._fetch = fetch_result or []
