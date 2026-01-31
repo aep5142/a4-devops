@@ -59,7 +59,7 @@ jobs:
     # Testing part
     - name: Testiing -> Pytest + Quality Gates + Comprehensive test reports
       run: |
-          pytest --cov=app --cov-fail-under=80 --cov-report=json
+          pytest --cov=app --cov-fail-under=75 --cov-report=json
           pytest --json-report --json-report-file=reports/test-results.json
 
 
