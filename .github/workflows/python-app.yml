@@ -1,0 +1,84 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Python application
+
+# Triggers Appropiately
+on:
+  push:
+    branches: [ "main" ] # Configure pipeline to run on push to main/master branch
+    paths: # Ensure triggers are specific to avoid unnecessary runs
+      - "app/**"
+      - ".github/workflows/**"
+  pull_request:
+    branches: [ "main" ] # Configure pipeline to run on Pull Requests to main/master branch
+    paths: # Ensure triggers are specific to avoid unnecessary runs.
+      - "app/**"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    # Set up any required environment variables or configuration files
+    env:
+      PYTHONPATH: . # Set up any required environment variables or configuration files
+
+    # [Environment setup]
+    steps:
+    #Check out the source code from the repository
+    - name: Environment setup -> Checks source code
+      uses: actions/checkout@v5 
+    
+    # Install and configure the correct runtime environment (Python in this case)
+    - name: Environment setup -> Set up Python 3.14
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.14"
+    
+    # Install project dependencies using appropriate package managers
+    - name: Environment setup -> Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
+    
+    # Linting and formatting tool: Ruff (used this to avoid using more dependencies)
+    # and giving full format to have all detail of the error
+    - name: Code quality checks -> Linting with ruff
+      # If any ruff rule fails, then the pipeline fails
+      run: |
+        # Lint with ruff
+        ruff check . --output-format=full
+      
+    
+    # Testing part
+    - name: Testiing -> Pytest + Quality Gates + Comprehensive test reports
+      run: |
+          pytest --cov=app --cov-fail-under=80 --cov-report=json
+          pytest --json-report --json-report-file=reports/test-results.json
+
+
+    - name: Testing -> Upload test artifacts
+      uses: actions/upload-artifact@v6
+      with:
+        name: test-artifacts
+        path: |
+          coverage.json
+          reports/test-results.json
+
+    # Building process
+    - name: Build process
+      run: |
+        docker compose up --build
+
+    - name: Build process -> Check container is alive
+      run: |
+        sleep 5
+        curl -f http://localhost:5000/view || exit 1
+
+    - name: Build process -> Stop containers and remove them
+      run: |
+          docker compose down
