@@ -1,0 +1,73 @@
+services:
+  web:
+    image: python:3.10-slim
+    working_dir: /app
+    volumes:
+      - ./app:/app
+      - web_logs:/app/logs
+    ports:
+      - "5000:5000"
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt &&
+             python main.py"
+    env_file:
+      - ./.env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - data_network
+      - proxy_network
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; urllib.request.urlopen('http://localhost:5000/view')\" || exit 1"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
+  db:
+    image: mysql:oraclelinux9
+    env_file:
+      - ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - data_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h ${DB_HOST} -u${DB_USER} -p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  proxy:
+    image: nginx:trixie-perl
+    ports:
+      - "80:80"
+    depends_on:
+      web:
+        condition: service_healthy
+    networks:
+      - proxy_network
+
+volumes:
+  db_data:
+  web_logs:
+
+networks:
+  data_network:
+    driver: bridge
+  proxy_network:
+    driver: bridge
