@@ -10,11 +10,13 @@ on:
     paths: # Ensure triggers are specific to avoid unnecessary runs
       - "app/**"
       - ".github/workflows/**"
+      - "tests/**"
   pull_request:
     branches: [ "main" ] # Configure pipeline to run on Pull Requests to main/master branch
     paths: # Ensure triggers are specific to avoid unnecessary runs.
       - "app/**"
       - ".github/workflows/**"
+      - "tests/**"
 
 permissions:
   contents: read
