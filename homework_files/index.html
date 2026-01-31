@@ -93,10 +93,26 @@
             <!-- Row for Staging-->
             <tr>
                 <th scope="row">Staging</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>
+                    Purpose of this environment is basically to simulate production environment (real life) to check that
+                    everything is working as expected and that UX is consistent. It's triggered by the clean-up of the integration
+                    environment.
+                </th>
+                <th>
+                    Data in the environment shoud be a copy of the production database or a large part of it (again, trying to 
+                    simulate production environment). When doing this part, sensitive or restricted data must be hidden.
+                </th>
+                <th>This environment needs to check in its steps that any sensitive data is restricted to the non-target users,
+                    meaning that only people/agents with permission can access this type of data.
+                    <br>
+                    For this part, access is only for responsibles of checking overall functionality of the app, and also,
+                    the go/no-go mechanism restricted to those who can make the decision. It has to be traceable to check any issues
+                    in the process.
+                </th>
+                <th>
+                    Since it's trying to simulate production, all type of testing needs to be done (load, security, compliance, user)
+                    to ensure that the app is working well in all it's aspects.
+                </th>
             </tr>
 
             <!-- Row for Production-->
