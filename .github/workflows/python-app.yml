@@ -84,15 +84,32 @@ jobs:
         EOF
     
     # Building process
-    - name: Build process
+    - name: Build process -> Start containers
       run: |
-        docker compose up --build
+        docker compose up -d --build
 
-    - name: Build process -> Check container is alive
+    # Wait until the web service is actually ready (otherwise is infinite)
+    - name: Build process -> Wait for web to be ready
       run: |
-        sleep 5
-        curl -f http://localhost:5000/view || exit 1
+        for i in {1..20}; do
+          if curl -f http://localhost:5000/view; then
+            echo "Service is up"
+            exit 0
+          fi
+          echo "Waiting for service..."
+          sleep 3
+        done
+        echo "Service failed to start"
+        docker compose logs
+        exit 1
 
+    # Quick smoke check (can be merged with the step above)
+    - name: Build process -> Smoke test endpoint
+      run: |
+        curl -f http://localhost:5000/view
+
+    # Cleanup
     - name: Build process -> Stop containers and remove them
+      if: always()
       run: |
-          docker compose down
+        docker compose down
