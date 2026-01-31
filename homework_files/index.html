@@ -49,20 +49,47 @@
             <!-- Row for Development-->
             <tr>
                 <th scope="row">Development</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>Here is where the code starts, meaning where features of any app start being developed or features can be modified.
+                    Anyway, this means starting with new code or check out existing code from an existing branch
+                </th>
+                <th>This stage has access to local data or <i>mock data</i> to simulate production data</th>
+                <th>
+                    Always with a version control to keep changes. This stage is still very <i>"local"</i> meaning 
+                    that access here is mostly to everyone but the ones performing changes are developers.
+                    <br>
+                    Security can be checked with statyic analyzers
+                </th>
+                <th>Mostly local testing with unit testing (checking functional correctness. Need to apply sunny
+                    day testing, rainy day testing and regression testing), Code Quality (is code
+                    readable for other developers?) and peer review and their feedback</th>
             </tr>
+            
             <!-- Row for Integration-->
             <tr>
                 <th scope="row">Integration</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>
+                    Is where the CI server works. This one is triggered by a commit or Pull Request to the version control
+                    system. This ensures that when someone says "my code is ready", a not local test is performed to check 
+                    all standards are met before merging the new code/existing code with tweaks into the existing code.
+                </th>
+                <th>It's always done again thorough the version control system (VCS) so it's possible to add/merge 
+                    code such that there's a tracking system for versions when something breaks or doesn't work.
+                    <br>
+                    This part can use syntethic data or parts of real data to test functional correctness.
+                </th>
+                <th>Since this is the part we are trying to merge code upstream in the structure, access here is mostly to
+                    developers so they can check that everything they're doing is working and compliance with standars set 
+                    for a staging environment
+                </th>
+                <th>Testing here is not only for the new developed code but for all parts of the code. This is done to check
+                    that the new code didn't break any other part of the program. Basically, saying that the new version is working
+                    on it's overall.
+                    <br>
+                    Testing needs to cover all parts, yet it can't be very large testing because we need it to be fast and have fast
+                    feedback.
+                </th>
             </tr>
-            
+
             <!-- Row for Staging-->
             <tr>
                 <th scope="row">Staging</th>
