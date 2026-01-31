@@ -1,1 +1,4 @@
 .env
+nginx.conf
+.python-version
+pyproject.toml
