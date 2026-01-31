@@ -3,3 +3,5 @@ python-dotenv
 mysql-connector-python
 pytest
 ruff
+pytest-cov
+pytest-json-report
