@@ -30,22 +30,26 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            when {
-                expression { env.BRANCH_PUSH == 'origin/main' }
-            }
+        stage('SonarQube Analysis') {
             steps {
-                echo 'Deploying application from main branch'
+                withSonarQubeEnv('SonarQube') {
+                    sh """
+                      sonar-scanner \
+                        -Dsonar.projectKey=my-jenkins-project \
+                        -Dsonar.sources=. \
+                        -Dsonar.language=py
+                    """
+                }
             }
         }
 
-        stage('Feature Checks') {
-            when {
-                expression { env.BRANCH_PUSH != 'origin/main' }
-            }
+        stage('Quality Gate') {
             steps {
-                echo 'Running feature branch checks'
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
+        }
         }
 
         stage('Archive Artifacts') {
@@ -54,5 +58,3 @@ pipeline {
             }
         }
     }
-}
-
