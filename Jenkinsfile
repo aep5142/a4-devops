@@ -4,12 +4,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Building branch: ${env.BRANCH_NAME}"
+                echo "Building branch: ${env.GIT_BRANCH}"
             }
         }
 
         stage('Test') {
-            when { branch 'main' }
+            when { branch 'origin/main' }
             steps { echo 'Running tests on main branch' }
         }
 
