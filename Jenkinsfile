@@ -1,26 +1,43 @@
 pipeline {
     agent any
 
+    environment {
+        BRANCH_PUSH = "${env.GIT_BRANCH ?: 'unknown'}"
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo "Building branch: ${env.GIT_BRANCH}"
+                echo "Building branch from: ${env.BRANCH_PUSH}"
             }
         }
 
         stage('Test') {
-            when { branch 'origin/main' }
-            steps { echo 'Running tests on main branch' }
+            when {
+                expression { env.BRANCH_PUSH == 'origin/main' }
+            }
+            steps {
+                echo 'Running tests on main branch'
+            }
         }
 
         stage('Deploy') {
-            when { branch 'main' }
-            steps { echo 'Deploying application from main branch' }
+            when {
+                expression { env.BRANCH_PUSH == 'origin/main' }
+            }
+            steps {
+                echo 'Deploying application from main branch'
+            }
         }
 
         stage('Feature Checks') {
-            when { not { branch 'main' } }
-            steps { echo 'Running feature branch checks' }
+            when {
+                expression { env.BRANCH_PUSH != 'origin/main' }
+            }
+            steps {
+                echo 'Running feature branch checks'
+            }
         }
     }
 }
+
