@@ -50,7 +50,6 @@ pipeline {
                 }
             }
         }
-        }
 
         stage('Archive Artifacts') {
             steps {
@@ -58,3 +57,4 @@ pipeline {
             }
         }
     }
+}
