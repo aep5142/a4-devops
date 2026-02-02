@@ -35,7 +35,7 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     sh """
                     /opt/homebrew/bin/sonar-scanner \
-                        -Dsonar.projectKey=my-jenkins-project \
+                        -Dsonar.projectKey=a4-devops \
                         -Dsonar.sources=. \
                         -Dsonar.language=py
                     """
