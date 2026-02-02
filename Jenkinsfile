@@ -33,15 +33,13 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh """
-                      sonar-scanner \
-                        -Dsonar.projectKey=my-jenkins-project \
-                        -Dsonar.sources=. \
-                        -Dsonar.language=py
-                    """
-                }
-            }
+                    sh "/opt/homebrew/bin/sonar-scanner 
+                    -Dsonar.projectKey=my-jenkins-project 
+                    -Dsonar.sources=. 
+                    -Dsonar.language=py"
         }
+    }
+}
 
         stage('Quality Gate') {
             steps {
