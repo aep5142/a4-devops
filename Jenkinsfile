@@ -13,16 +13,11 @@ pipeline {
                 echo "Building branch from: ${env.BRANCH_PUSH}"
                 
                 // Example build artifact
+                echo "Building version ${VERSION}"
                 sh """
                     mkdir -p dist
                     zip -r dist/${ARTIFACT_NAME} .
                 """
-            }
-        }
-
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'dist/*.zip', fingerprint: true
             }
         }
 
