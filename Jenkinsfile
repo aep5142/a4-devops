@@ -3,12 +3,26 @@ pipeline {
 
     environment {
         BRANCH_PUSH = "${env.GIT_BRANCH ?: 'unknown'}"
+        VERSION = "1.0.${env.BUILD_NUMBER}"
+        ARTIFACT_NAME = "app-${VERSION}.zip"
     }
 
     stages {
         stage('Build') {
             steps {
                 echo "Building branch from: ${env.BRANCH_PUSH}"
+                
+                // Example build artifact
+                sh """
+                    mkdir -p dist
+                    zip -r dist/${ARTIFACT_NAME} .
+                """
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'dist/*.zip', fingerprint: true
             }
         }
 
