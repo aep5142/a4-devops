@@ -52,6 +52,12 @@ pipeline {
                 echo 'Running feature branch checks'
             }
         }
+
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'dist/*.zip', fingerprint: true
+            }
+        }
     }
 }
 
