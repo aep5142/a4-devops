@@ -26,7 +26,7 @@ pipeline {
                 expression { env.BRANCH_PUSH == 'origin/main' }
             }
             steps {
-                echo 'Running tests on main branch!!'
+                echo 'Running tests on main branch!'
             }
         }
 
