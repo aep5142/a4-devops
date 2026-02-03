@@ -89,11 +89,17 @@ pipeline {
         )
     }
     failure {
-        slackSend(
-            color: 'danger',
-            message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})"
-        )
-    }
+            script {
+                // We add the Build URL so you can click directly to the error logs
+                def buildUrl = "${env.BUILD_URL}console"
+                slackSend(
+                    tokenCredentialId: 'slack-v3-a4',
+                    channel: '#a4_devops_aep',
+                    color: 'danger',
+                    message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nBranch: ${env.BRANCH_PUSH}\nDuration: ${currentBuild.durationString}\nCheck logs here: ${buildUrl}"
+                )
+            }
+}
 }
 }
 
