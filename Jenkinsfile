@@ -74,6 +74,13 @@ pipeline {
             }
         }
 
+        stage('Test End to End') {
+            steps {
+                echo "Running End-to-End tests..."
+                sh 'python tests/test_e2e.py'
+                }
+}
+
         stage('Archive Artifacts') {
             steps {
                 archiveArtifacts artifacts: 'dist/*.zip', fingerprint: false
