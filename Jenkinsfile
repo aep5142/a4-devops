@@ -54,7 +54,7 @@ pipeline {
                 // Forzamos el uso de la API de hooks para evitar errores de autodescubrimiento del plugin
                 slackSend(
                     baseUrl: 'https://hooks.slack.com/services/',
-                    tokenCredentialId: 'slack-v3-a4',
+                    tokenCredentialId: 'slack-v4',
                     channel: '#a4_devops_aep',
                     color: 'good',
                     message: "✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})"
@@ -65,7 +65,7 @@ pipeline {
             script {
                 slackSend(
                     baseUrl: 'https://hooks.slack.com/services/',
-                    tokenCredentialId: 'slack-v3-a4',
+                    tokenCredentialId: 'slack-v4',
                     channel: '#a4_devops_aep',
                     color: 'danger',
                     message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})"
