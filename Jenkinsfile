@@ -27,7 +27,7 @@ pipeline {
                 expression { env.BRANCH_PUSH != 'origin/main' }
             }
             steps {
-                echo 'Running tests not in main branch!'
+                echo 'Running tests not in main branch!!'
                 // sh 'pytest'  (example)
             }
         }
