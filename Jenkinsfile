@@ -95,6 +95,6 @@ pipeline {
             message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})"
         )
     }
-    }
+}
 }
 
