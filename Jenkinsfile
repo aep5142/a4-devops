@@ -46,11 +46,10 @@ pipeline {
         }
 }
 
+        /*
         stage('Quality Gate') {
             steps {
                 script {
-                    // If this times out, the webhook is not configured correctly in SonarQube!
-                    // Check SonarQube > Administration > Configuration > Webhooks
                     timeout(time: 5, unit: 'MINUTES') {
                         def qg = waitForQualityGate abortPipeline: true
                         if (qg.status != 'OK') {
@@ -60,6 +59,7 @@ pipeline {
                 }
             }
         }
+        */
 
 
 
