@@ -2,3 +2,4 @@
 nginx.conf
 .python-version
 pyproject.toml
+__pychache__/
