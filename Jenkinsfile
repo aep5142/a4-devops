@@ -23,7 +23,7 @@ pipeline {
         }
 
         stage('Test') {
-            agent { label 'test' }
+            // agent { label 'test' }
             when {
                 expression { env.BRANCH_PUSH == 'test-branch' }
             }
@@ -55,7 +55,7 @@ pipeline {
         }
 
         stage('Deploy') {
-            agent { label 'deploy' }  // 👈 DEPLOY AGENT
+            // agent { label 'deploy' }  // 👈 DEPLOY AGENT
             when {
                 expression { env.BRANCH_PUSH == 'deploy-branch' }
             }
