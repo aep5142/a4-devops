@@ -25,7 +25,7 @@ pipeline {
         stage('Test') {
             agent { label 'test' }
             when {
-                expression { env.BRANCH_PUSH != 'test-branch' }
+                expression { env.BRANCH_PUSH == 'test-branch' }
             }
             steps {
                 echo 'Running tests not in main branch!'
@@ -57,7 +57,7 @@ pipeline {
         stage('Deploy') {
             agent { label 'deploy' }  // 👈 DEPLOY AGENT
             when {
-                expression { env.BRANCH_PUSH != 'deploy-branch' }
+                expression { env.BRANCH_PUSH == 'deploy-branch' }
             }
             steps {
                 echo "Deploying ${ARTIFACT_NAME}"
