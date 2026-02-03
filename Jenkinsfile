@@ -14,7 +14,6 @@ pipeline {
                 echo "Building branch from: ${env.BRANCH_PUSH}"
                 echo "Building version ${VERSION}"
                 echo "Testing with agent any!!"
-                echo "Slack webhook is ${SLACK_WEBHOOK}"
 
                 sh """
                     mkdir -p dist
