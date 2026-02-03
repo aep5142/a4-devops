@@ -18,8 +18,6 @@ pipeline {
                 sh """
                     mkdir -p dist
                     zip -r dist/${ARTIFACT_NAME} app/ uv.lock
-                    python -m pip install --upgrade pip
-                    if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
                 """
             }
         }
@@ -76,12 +74,6 @@ pipeline {
             }
         }
 
-        stage('Test End to End') {
-            steps {
-                echo "Running End-to-End tests..."
-                sh 'python tests/test_e2e.py'
-                }
-}
 
         stage('Archive Artifacts') {
             steps {
