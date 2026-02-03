@@ -40,7 +40,9 @@ pipeline {
                     /opt/homebrew/bin/sonar-scanner \
                         -Dsonar.projectKey=a4-devops \
                         -Dsonar.sources=app \
-                        -Dsonar.language=py
+                        -Dsonar.language=py \
+                        -Dsonar.exclusions=**/__pycache__/**,**/*.pyc,**/.env,**/node_modules/**
+
                     """
                 }
             }
