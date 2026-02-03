@@ -84,14 +84,19 @@ pipeline {
 
     post {
         success {
+            // Using tokenCredentialId ensures the plugin uses your saved secret
             slackSend(
                 color: 'good',
+                tokenCredentialId: 'slack-v3-a4',
+                channel: '#a4_devops_aep',
                 message: "✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BRANCH_PUSH})"
             )
         }
         failure {
             slackSend(
                 color: 'danger',
+                tokenCredentialId: 'slack-v3-a4',
+                channel: '#a4_devops_aep',
                 message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BRANCH_PUSH})"
             )
         }
