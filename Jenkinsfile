@@ -5,7 +5,7 @@ pipeline {
         BRANCH_PUSH = "${env.GIT_BRANCH ?: 'unknown'}"
         VERSION = "1.0.${env.BUILD_NUMBER}"
         ARTIFACT_NAME = "app-${VERSION}.zip"
-        SLACK_WEBHOOK = credentials('slack-v3-a4')
+        SLACK_WEBHOOK = credentials('slack-v4')
     }
 
     stages {
@@ -86,13 +86,10 @@ pipeline {
     post {
         success {
             script {
-                // We use only the minimal required fields to let the plugin handle the URL logic
+                // Ahora confiamos en la configuración global de Jenkins
                 slackSend(
                     color: 'good',
-                    tokenCredentialId: 'slack-v3-a4',
-                    channel: '#a4_devops_aep', 
-                    message: "✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})",
-                    failOnError: true
+                    message: "✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})"
                 )
             }
         }
@@ -100,10 +97,7 @@ pipeline {
             script {
                 slackSend(
                     color: 'danger',
-                    tokenCredentialId: 'slack-v3-a4',
-                    channel: '#a4_devops_aep',
-                    message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})",
-                    failOnError: true
+                    message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})"
                 )
             }
         }
