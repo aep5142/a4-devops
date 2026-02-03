@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent any   // default agent for Build, Sonar, Archive
 
     environment {
         BRANCH_PUSH = "${env.GIT_BRANCH ?: 'unknown'}"
@@ -8,12 +8,12 @@ pipeline {
     }
 
     stages {
+
         stage('Build') {
             steps {
                 echo "Building branch from: ${env.BRANCH_PUSH}"
-                
-                // Example build artifact
                 echo "Building version ${VERSION}"
+
                 sh """
                     mkdir -p dist
                     zip -r dist/${ARTIFACT_NAME} .
@@ -22,11 +22,13 @@ pipeline {
         }
 
         stage('Test') {
+            agent { label 'test' }   // 👈 TEST AGENT
             when {
-                expression { env.BRANCH_PUSH == 'origin/main' }
+                expression { env.BRANCH_PUSH != 'origin/main' }
             }
             steps {
-                echo 'Running tests on main branch!'
+                echo 'Running tests not in main branch!'
+                // sh 'pytest'  (example)
             }
         }
 
@@ -39,16 +41,26 @@ pipeline {
                         -Dsonar.sources=. \
                         -Dsonar.language=py
                     """
-
+                }
+            }
         }
-    }
-}
 
         stage('Quality Gate') {
             steps {
                 timeout(time: 3, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
+            }
+        }
+
+        stage('Deploy') {
+            agent { label 'deploy' }  // 👈 DEPLOY AGENT
+            when {
+                expression { env.BRANCH_PUSH == 'origin/main' }
+            }
+            steps {
+                echo "Deploying ${ARTIFACT_NAME}"
+                // sh './deploy.sh'
             }
         }
 
@@ -59,3 +71,4 @@ pipeline {
         }
     }
 }
+
