@@ -16,7 +16,7 @@ pipeline {
 
                 sh """
                     mkdir -p dist
-                    zip -r dist/${ARTIFACT_NAME} .
+                    zip -r dist/${ARTIFACT_NAME} app/ uv.lock
                 """
             }
         }
