@@ -85,14 +85,14 @@ pipeline {
     post {
         success {
             sh '''
-            curl -X POST -H "Content-type: application/json" \
+            curl -X POST -H "Content-Type: application/json" \
             -d "{\"text\":\"✅ Pipeline SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}\"}" \
             "$SLACK_WEBHOOK"
             '''
         }
         failure {
             sh '''
-            curl -X POST -H "Content-type: application/json" \
+            curl -X POST -H "Content-Type: application/json" \
             -d "{\"text\":\"❌ Pipeline FAILED: ${JOB_NAME} #${BUILD_NUMBER}\"}" \
             "$SLACK_WEBHOOK"
             '''
