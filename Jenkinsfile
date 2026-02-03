@@ -49,15 +49,18 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    timeout(time: 10, unit: 'MINUTES') {
-                def qg = waitForQualityGate abortPipeline: false
-                if (qg.status != 'OK') {
-                    error "Pipeline aborted due to quality gate: ${qg.status}"
+                    // If this times out, the webhook is not configured correctly in SonarQube!
+                    // Check SonarQube > Administration > Configuration > Webhooks
+                    timeout(time: 5, unit: 'MINUTES') {
+                        def qg = waitForQualityGate abortPipeline: true
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate: ${qg.status}"
+                        }
+                    }
                 }
             }
-            }
         }
-        }
+
 
 
         stage('Deploy') {
