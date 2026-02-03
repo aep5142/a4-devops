@@ -80,5 +80,22 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            sh """
+            curl -X POST -H 'Content-type: application/json' \
+            -d '{"text":"✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
+            ${SLACK_WEBHOOK}
+            """
+        }
+        failure {
+            sh """
+            curl -X POST -H 'Content-type: application/json' \
+            -d '{"text":"❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
+            ${SLACK_WEBHOOK}
+            """
+        }
+    }
 }
 
