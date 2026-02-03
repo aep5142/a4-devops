@@ -13,6 +13,7 @@ pipeline {
             steps {
                 echo "Building branch from: ${env.BRANCH_PUSH}"
                 echo "Building version ${VERSION}"
+                echo "Testing with agent any!"
 
                 sh """
                     mkdir -p dist
@@ -22,9 +23,9 @@ pipeline {
         }
 
         stage('Test') {
-            agent { label 'test' }   // 👈 TEST AGENT
+            agent { label 'test' }
             when {
-                expression { env.BRANCH_PUSH != 'origin/main' }
+                expression { env.BRANCH_PUSH != 'test-branch' }
             }
             steps {
                 echo 'Running tests not in main branch!'
@@ -56,7 +57,7 @@ pipeline {
         stage('Deploy') {
             agent { label 'deploy' }  // 👈 DEPLOY AGENT
             when {
-                expression { env.BRANCH_PUSH == 'origin/main' }
+                expression { env.BRANCH_PUSH != 'deploy-branch' }
             }
             steps {
                 echo "Deploying ${ARTIFACT_NAME}"
