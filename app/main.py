@@ -40,7 +40,7 @@ def init_db():
 def add_records():
     to_add = request.args.get("to_add_item")
     if not to_add:
-        return "Error: no todo item provided", 400
+        return "Error: no to-do item provided", 400
 
     try:
         # Connect to the database
