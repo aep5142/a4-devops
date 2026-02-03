@@ -5,3 +5,6 @@ pytest
 ruff
 pytest-cov
 pytest-json-report
+selenium
+pytest-html
+subprocess
