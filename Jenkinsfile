@@ -18,6 +18,8 @@ pipeline {
                 sh """
                     mkdir -p dist
                     zip -r dist/${ARTIFACT_NAME} app/ uv.lock
+                    python -m pip install --upgrade pip
+                    if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
                 """
             }
         }
