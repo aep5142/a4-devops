@@ -37,24 +37,28 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh """
-                    /opt/homebrew/bin/sonar-scanner \
-                        -Dsonar.projectKey=a4-devops \
-                        -Dsonar.sources=app \
-                        -Dsonar.language=py \
-                        -Dsonar.exclusions=**/__pycache__/**,**/*.pyc,**/.env,**/node_modules/**
-
-                    """
-                }
-            }
+            /opt/homebrew/bin/sonar-scanner \
+                -Dsonar.projectKey=a4-devops \
+                -Dsonar.sources=app \
+                -Dsonar.exclusions=**/__pycache__/**,**/*.pyc,**/.env,**/node_modules/**
+            """
         }
+        }
+}
 
         stage('Quality Gate') {
             steps {
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+                script {
+                    timeout(time: 10, unit: 'MINUTES') {
+                def qg = waitForQualityGate abortPipeline: false
+                if (qg.status != 'OK') {
+                    error "Pipeline aborted due to quality gate: ${qg.status}"
                 }
             }
+            }
         }
+        }
+
 
         stage('Deploy') {
             // agent { label 'deploy' }  // 👈 DEPLOY AGENT
