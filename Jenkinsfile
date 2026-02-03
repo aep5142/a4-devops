@@ -77,25 +77,23 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'dist/*.zip', fingerprint: true
+                archiveArtifacts artifacts: 'dist/*.zip', fingerprint: false
             }
         }
     }
 
     post {
         success {
-            sh """
-            curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
-            ${SLACK_WEBHOOK}
-            """
+            slackSend(
+                color: 'good',
+                message: "✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BRANCH_PUSH})"
+            )
         }
         failure {
-            sh """
-            curl -X POST -H 'Content-type: application/json' \
-            --data '{"text":"❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
-            ${SLACK_WEBHOOK}
-            """
+            slackSend(
+                color: 'danger',
+                message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BRANCH_PUSH})"
+            )
         }
     }
     }
