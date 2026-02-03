@@ -5,6 +5,7 @@ pipeline {
         BRANCH_PUSH = "${env.GIT_BRANCH ?: 'unknown'}"
         VERSION = "1.0.${env.BUILD_NUMBER}"
         ARTIFACT_NAME = "app-${VERSION}.zip"
+        SLACK_WEBHOOK = credentials('slack-v3-a4')
     }
 
     stages {
@@ -83,17 +84,18 @@ pipeline {
 
     post {
         success {
+            // use the environment variable inside sh
             sh """
             curl -X POST -H 'Content-type: application/json' \
-            -d '{"text":"✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
-            ${SLACK_WEBHOOK}
+            -d '{\"text\":\"✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}\"}' \
+            $SLACK_WEBHOOK
             """
         }
         failure {
             sh """
             curl -X POST -H 'Content-type: application/json' \
-            -d '{"text":"❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
-            ${SLACK_WEBHOOK}
+            -d '{\"text\":\"❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}\"}' \
+            $SLACK_WEBHOOK
             """
         }
     }
