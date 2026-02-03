@@ -13,7 +13,7 @@ pipeline {
             steps {
                 echo "Building branch from: ${env.BRANCH_PUSH}"
                 echo "Building version ${VERSION}"
-                echo "Testing with agent any!"
+                echo "Testing with agent any!!"
 
                 sh """
                     mkdir -p dist
