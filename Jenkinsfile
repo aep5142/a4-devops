@@ -39,7 +39,7 @@ pipeline {
                     sh """
                     /opt/homebrew/bin/sonar-scanner \
                         -Dsonar.projectKey=a4-devops \
-                        -Dsonar.sources=app
+                        -Dsonar.sources=app \
                         -Dsonar.language=py
                     """
                 }
