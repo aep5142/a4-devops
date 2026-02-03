@@ -15,6 +15,7 @@ pipeline {
                 echo "Building branch from: ${env.BRANCH_PUSH}"
                 echo "Building version ${VERSION}"
                 echo "Testing with agent any!!"
+                echo "Slack webhook is ${SLACK_WEBHOOK}"
 
                 sh """
                     mkdir -p dist
@@ -85,24 +86,23 @@ pipeline {
     post {
         success {
             script {
-                echo "Attempting to send Slack Success notification for branch: ${env.BRANCH_PUSH}"
+                // We use only the minimal required fields to let the plugin handle the URL logic
                 slackSend(
                     color: 'good',
                     tokenCredentialId: 'slack-v3-a4',
-                    channel: 'a4_devops_aep', // Try without the # if the previous one failed
-                    message: "✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BRANCH_PUSH})",
+                    channel: '#a4_devops_aep', 
+                    message: "✅ Pipeline SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})",
                     failOnError: true
                 )
             }
         }
         failure {
             script {
-                echo "Attempting to send Slack Failure notification for branch: ${env.BRANCH_PUSH}"
                 slackSend(
                     color: 'danger',
                     tokenCredentialId: 'slack-v3-a4',
-                    channel: 'a4_devops_aep',
-                    message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BRANCH_PUSH})",
+                    channel: '#a4_devops_aep',
+                    message: "❌ Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (Branch: ${env.BRANCH_PUSH})",
                     failOnError: true
                 )
             }
