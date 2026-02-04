@@ -42,11 +42,18 @@ pipeline {
 
         stage("Compose Docker") { 
             steps {
-                """
-                docker-compose up --build
-                """
+                sh '''
+                # Build and start containers
+                docker-compose up --build -d
+
+                # Optional: wait a few seconds for services to start
+                sleep 10
+
+                # Check running containers
+                docker ps
+                '''
+                }
             }
-        }
 
         stage('Test') {
             // agent { label 'test' }
