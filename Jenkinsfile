@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'python:3.12' } // official Python image
-    }   // default agent for Build, Sonar, Archive
+    agent any   // default agent for Build, Sonar, Archive
 
     environment {
         BRANCH_PUSH = "${env.GIT_BRANCH ?: 'unknown'}"
@@ -21,6 +19,12 @@ pipeline {
                     mkdir -p dist
                     zip -r dist/${ARTIFACT_NAME} app/ uv.lock
                 """
+            }
+        }
+
+        stage('Check Python') {
+            steps {
+                sh 'python3 --version || python --version'
             }
         }
 
