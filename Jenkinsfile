@@ -43,17 +43,12 @@ pipeline {
         stage("Compose Docker") { 
             steps {
                 sh '''
-                # Build and start containers
+                export PATH=$PATH:/opt/homebrew/bin
                 docker-compose up --build -d
-
-                # Optional: wait a few seconds for services to start
-                sleep 10
-
-                # Check running containers
-                docker ps
                 '''
-                }
             }
+        }
+
 
         stage('Test') {
             // agent { label 'test' }
