@@ -40,11 +40,10 @@ pipeline {
             }
         }
 
-        stage("Compose Docker") { 
+        stage("Compose Docker") {
             steps {
                 sh '''
-                export PATH=$PATH:/opt/homebrew/bin
-                docker compose up --build -d
+                /opt/homebrew/bin/docker compose up --build -d
                 '''
             }
         }
