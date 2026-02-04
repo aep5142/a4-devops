@@ -22,9 +22,21 @@ pipeline {
             }
         }
 
-        stage('Check Python') {
+        stage('Setup Python Env') {
             steps {
-                sh 'python3 --version || python --version'
+                sh '''
+                # Create a virtual environment in the workspace
+                python3 -m venv venv
+                
+                # Activate it
+                source venv/bin/activate
+
+                # Upgrade pip just in case
+                pip install --upgrade pip
+
+                # Install all packages from requirements.txt
+                pip install -r app/requirements.txt
+                '''
             }
         }
 
