@@ -1,5 +1,7 @@
 pipeline {
-    agent any   // default agent for Build, Sonar, Archive
+    agent {
+        docker { image 'python:3.12' } // official Python image
+    }   // default agent for Build, Sonar, Archive
 
     environment {
         BRANCH_PUSH = "${env.GIT_BRANCH ?: 'unknown'}"
@@ -19,18 +21,6 @@ pipeline {
                     mkdir -p dist
                     zip -r dist/${ARTIFACT_NAME} app/ uv.lock
                 """
-            }
-        }
-
-        stage('Setup Python') {
-            steps {
-                // Update package list and install Python3 and pip
-                sh '''
-                sudo apt-get update
-                sudo apt-get install -y python3 python3-pip
-                python3 --version
-                pip3 --version
-                '''
             }
         }
 
