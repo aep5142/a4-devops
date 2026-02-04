@@ -40,6 +40,14 @@ pipeline {
             }
         }
 
+        stage("Compose Docker") { 
+            steps {
+                """
+                docker-compose up --build
+                """
+            }
+        }
+
         stage('Test') {
             // agent { label 'test' }
             when {
